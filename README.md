@@ -1,8 +1,11 @@
 # MCP Jenkins
-MCP server that integrates Jenkins 
+MCP server that integrates Jenkins
 
 ## Installation
 ```
+uvx mcp-jenkins
+
+# or
 pip install mcp-jenkins
 ```
 
@@ -10,10 +13,26 @@ pip install mcp-jenkins
 
 ### Inspector
 ```
+npx @modelcontextprotocol/inspector uvx mcp-jenkins --jenkins-url xxx --jenkins-username xxx --jenkins-password xxx
+
+# or
 npx @modelcontextprotocol/inspector uv run mcp-jenkins --jenkins-url xxx --jenkins-username xxx --jenkins-password xxx
 ```
 
-### Used by AutoGen
+### Optional Arguments
+- `--jenkins-timeout`: Timeout for Jenkins API requests, default is 5 seconds
+
+
+### Available Tools
+
+| Tool           | Description                  |
+|----------------|------------------------------|
+| get_all_jobs   | Get all jobs                 |
+| get_job_config | Get job config               |
+| search_jobs    | Search job by specific field |
+
+
+### AutoGen
 ```python
 import asyncio
 
@@ -37,6 +56,16 @@ async def main() -> None:
             '--jenkins-url',
             'xxx'
         ],
+        # command='uvx',
+        # args=[
+        #     'mcp-jenkins',
+        #     '--jenkins-username',
+        #     'xxx',
+        #     '--jenkins-password',
+        #     'xxx',
+        #     '--jenkins-url',
+        #     'xxx'
+        # ],
     )
 
     # Get the translation tool from the server
@@ -59,14 +88,21 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### Optional Arguments
-- `--jenkins-timeout`: Timeout for Jenkins API requests, default is 5 seconds
 
+## Development
+If you only want to use the mcp-server, you can skip this and below steps.
 
-## Available Tools
+```shell
+uv sync --frozen --all-extras --dev 
+```
 
-| Tool           | Description                  |
-|----------------|------------------------------|
-| get_all_jobs   | Get all jobs                 |
-| get_job_config | Get job config               |
-| search_jobs    | Search job by specific field |
+```shell
+# pre commit
+pre-commit run --all-files
+```
+
+```shell
+# UT
+export PYTHONPATH=${PYTHONPATH}:src
+uv run pytest --cov=mcp_jenkins
+```

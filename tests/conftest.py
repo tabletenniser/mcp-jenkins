@@ -4,7 +4,6 @@ import pytest
 
 from mcp_jenkins.jenkins import JenkinsClient
 
-
 JOBS = [
     {
         '_class': 'com.cloudbees.hudson.plugins.folder.Folder',

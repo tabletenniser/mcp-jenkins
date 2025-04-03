@@ -1,5 +1,5 @@
 import json
-from typing import Any, Literal, Callable
+from typing import Any, Callable, Literal
 
 from pydantic import BaseModel, Field
 from pydantic.main import IncEx
