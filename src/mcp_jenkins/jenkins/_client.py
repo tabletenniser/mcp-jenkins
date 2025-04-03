@@ -51,7 +51,8 @@ class JenkinsClient:
                 continue
             if url_pattern and not url_pattern.match(job.url):
                 continue
-            if color_pattern and not color_pattern.match(job.color):
+            # Folder do not have attribute color
+            if color_pattern and (isinstance(job, Folder) or not color_pattern.match(job.color)):
                 continue
             result.append(job)
 

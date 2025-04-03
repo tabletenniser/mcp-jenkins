@@ -9,7 +9,7 @@ class JobBase(BaseModel):
     class_: str = Field(..., alias='_class')
     name: str
     url: str
-    fullname: str = None
+    fullname: str
 
     class Config:
         validate_by_name = True
