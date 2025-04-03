@@ -12,11 +12,8 @@ class JenkinsClient:
 
     def _job_to_model(self, job_data: dict) -> JobBase:
         if job_data['_class'].endswith('Folder'):
-            jobs = [self._job_to_model(job) for job in job_data['jobs']]
-            data = job_data.copy()
-            data['jobs'] = jobs
-            return Folder(**data)
-        return Job(**job_data)
+            return Folder.model_validate(job_data)
+        return Job.model_validate(job_data)
 
     def get_all_jobs(self, refresh: bool = False) -> list[JobBase]:
         if refresh:

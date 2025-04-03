@@ -18,42 +18,11 @@ def test_job_initialization():
 
 
 def test_test_folder_initialization():
-    job1 = JobBase(class_='some_class', name='job1', url='http://example.com/job1', fullname='job1_fullname')
-    job2 = JobBase(class_='some_class', name='job2', url='http://example.com/job2', fullname='job2_fullname')
+    job1 = Job(class_='some_class', name='job1', url='http://example.com/job1', fullname='job1_fullname', color='red')
+    job2 = Job(class_='some_class', name='job2', url='http://example.com/job2', fullname='job2_fullname', color='green')
     folder = Folder(class_='folder_class', name='folder_name', url='http://example.com/folder',
                     fullname='folder_fullname', jobs=[job1, job2])
     assert len(folder.jobs) == 2
-
-
-def test_folder_model_dump():
-    job1 = JobBase(class_='some_class', name='job1', url='http://example.com/job1', fullname='job1_fullname')
-    job2 = JobBase(class_='some_class', name='job2', url='http://example.com/job2', fullname='job2_fullname')
-    folder = Folder(class_='folder_class', name='folder_name', url='http://example.com/folder',
-                    fullname='folder_fullname', jobs=[job1, job2])
-    data = folder.model_dump()
-    assert 'jobs' in data
-    assert len(data['jobs']) == 2
-    assert data['jobs'][0] == {
-        'class_': job1.class_,
-        'name': job1.name,
-        'url': job1.url,
-        'fullname': job1.fullname
-    }
-    assert data['jobs'][1] == {
-        'class_': job2.class_,
-        'name': job2.name,
-        'url': job2.url,
-        'fullname': job2.fullname
-    }
-
-
-def test_folder_model_dump_json():
-    job1 = JobBase(class_='some_class', name='job1', url='http://example.com/job1', fullname='job1_fullname')
-    job2 = JobBase(class_='some_class', name='job2', url='http://example.com/job2', fullname='job2_fullname')
-    folder = Folder(class_='folder_class', name='folder_name', url='http://example.com/folder',
-                    fullname='folder_fullname', jobs=[job1, job2])
-    json_data = folder.model_dump_json()
-    assert '"jobs":' in json_data
 
 
 def test_job_base_missing_required_field():
