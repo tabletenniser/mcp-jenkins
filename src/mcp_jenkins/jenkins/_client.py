@@ -2,11 +2,11 @@ import re
 
 from jenkins import Jenkins
 
-from mcp_jenkins.models.job import JobBase, Folder, Job
+from mcp_jenkins.models.job import Folder, Job, JobBase
 
 
 class JenkinsClient:
-    def __init__(self, *, url, username, password, timeout=5):
+    def __init__(self, *, url: str, username: str, password: str, timeout: int = 5) -> None:
         self.jenkins = Jenkins(url=url, username=username, password=password, timeout=timeout)
         self.jobs = self.get_all_jobs(refresh=True)
 
@@ -51,7 +51,8 @@ class JenkinsClient:
                 continue
             if url_pattern and not url_pattern.match(job.url):
                 continue
-            if color_pattern and not color_pattern.match(job.color):
+            # Folder do not have attribute color
+            if color_pattern and (isinstance(job, Folder) or not color_pattern.match(job.color)):
                 continue
             result.append(job)
 

@@ -1,5 +1,5 @@
 import json
-from typing import Any, Literal, Callable
+from typing import Any, Callable, Literal
 
 from pydantic import BaseModel, Field
 from pydantic.main import IncEx
@@ -9,7 +9,7 @@ class JobBase(BaseModel):
     class_: str = Field(..., alias='_class')
     name: str
     url: str
-    fullname: str = None
+    fullname: str
 
     class Config:
         validate_by_name = True
