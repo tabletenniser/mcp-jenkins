@@ -18,10 +18,10 @@ permissions:
 jobs:
   release-build-and-publish-pypi:
     runs-on: ubuntu-latest
-    
+
     environment:
       name: pypi
-  
+
     steps:
       - uses: actions/checkout@v4
 
@@ -39,7 +39,7 @@ jobs:
       - name: Run tests
         # For example, using `pytest`
         run: uv run pytest --cov=mcp_jenkins
-          
+
       - name: Build release distributions
         run: uv build
 
@@ -48,9 +48,8 @@ jobs:
         with:
           name: release-dists
           path: dist/
-      
+
       - name: Publish PyPI
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.UV_PUBLISH_TOKEN }}
         run: uv publish
-      

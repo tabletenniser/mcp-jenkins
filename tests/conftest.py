@@ -90,9 +90,9 @@ def mock_jenkins():
 
 @pytest.fixture
 def jenkins_client(mock_jenkins, mock_jenkins_config):
-    with patch('mcp_jenkins.jenkins.JenkinsClient.__init__', return_value=None):
+    with patch('mcp_jenkins.jenkins.JenkinsClient.get_all_jobs', return_value=[]):
         client = JenkinsClient(**mock_jenkins_config)
-        client.jenkins = mock_jenkins
-        client.jobs = client.get_all_jobs(refresh=True)
 
-        yield client
+    client.jenkins = mock_jenkins
+    client.jobs = client.get_all_jobs(refresh=True)
+    yield client
