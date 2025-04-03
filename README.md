@@ -93,7 +93,7 @@ if __name__ == "__main__":
 If you only want to use the mcp-server, you can skip this and below steps.
 
 ```shell
-uv sync --frozen --all-extras --dev 
+uv sync --frozen --all-extras --dev
 ```
 
 ```shell
@@ -103,6 +103,5 @@ pre-commit run --all-files
 
 ```shell
 # UT
-export PYTHONPATH=${PYTHONPATH}:src
 uv run pytest --cov=mcp_jenkins
 ```
