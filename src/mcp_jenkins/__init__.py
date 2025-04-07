@@ -1,9 +1,8 @@
-import asyncio
 import os
 
 import click
 
-from . import server
+from .server import mcp
 
 
 @click.command()
@@ -28,7 +27,7 @@ def main(
     else:
         raise ValueError('Please provide valid jenkins_url, jenkins_username, and jenkins_password')
 
-    asyncio.run(server.run_server())
+    mcp.run()
 
 
 if __name__ == '__main__':
