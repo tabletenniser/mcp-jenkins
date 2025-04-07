@@ -22,14 +22,13 @@ RUNNING_BUILDS = [
 
 
 @pytest.fixture()
-def jenkins_build_client(jenkins_client):
-    jenkins_client.build = JenkinsBuild(jenkins_client.jenkins)
-    jenkins_client.jenkins.get_running_builds.return_value = RUNNING_BUILDS
-    yield jenkins_client
+def jenkins_build(mock_jenkins):
+    mock_jenkins.get_running_builds.return_value = RUNNING_BUILDS
+    yield JenkinsBuild(mock_jenkins)
 
 
-def test_to_model(jenkins_build_client):
-    model = jenkins_build_client.build._to_model({
+def test_to_model(jenkins_build):
+    model = jenkins_build._to_model({
         'name': 'RUN_JOB_LIST',
         'number': 2,
         'url': 'http://example.com/job/RUN_JOB_LIST/job/job-one/2/',
@@ -46,8 +45,8 @@ def test_to_model(jenkins_build_client):
     )
 
 
-def test_get_running_builds(jenkins_build_client):
-    builds = jenkins_build_client.build.get_running_builds()
+def test_get_running_builds(jenkins_build):
+    builds = jenkins_build.get_running_builds()
 
     assert len(builds) == 2
     assert builds[0] == Build(

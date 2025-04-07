@@ -49,12 +49,7 @@ async def list_tools() -> list[Tool]:
             description='Get all jobs',
             inputSchema={
                 'type': 'object',
-                'properties': {
-                    'refresh': {
-                        'type': 'boolean',
-                        'description': 'Weather to refresh the jobs list'
-                    }
-                }
+                'properties': {}
             }
         ),
         Tool(
@@ -67,7 +62,8 @@ async def list_tools() -> list[Tool]:
                         'type': 'string',
                         'description': 'The fullname of the job'
                     }
-                }
+                },
+                'required': ['fullname'],
             }
         ),
         Tool(
@@ -96,10 +92,6 @@ async def list_tools() -> list[Tool]:
                         'type': 'string',
                         'description': 'The pattern of the color'
                     },
-                    'refresh': {
-                        'type': 'boolean',
-                        'description': 'Weather to refresh the jobs list'
-                    }
                 }
             }
         ),
@@ -124,9 +116,7 @@ async def call_tool(name: str, arguments: Any) -> Sequence[TextContent]:
     ctx = app.request_context.lifespan_context
 
     if name == 'get_all_jobs':
-        refresh = arguments.get('refresh', False)
-
-        jobs = ctx.client.get_all_jobs(refresh=refresh)
+        jobs = ctx.client.job.get_all_jobs()
 
         return [
             TextContent(
@@ -138,7 +128,7 @@ async def call_tool(name: str, arguments: Any) -> Sequence[TextContent]:
     elif name == 'get_job_config':
         fullname = arguments.get('fullname')
 
-        config = ctx.client.get_job_config(fullname)
+        config = ctx.client.job.get_job_config(fullname)
 
         return [
             TextContent(
@@ -153,15 +143,13 @@ async def call_tool(name: str, arguments: Any) -> Sequence[TextContent]:
         fullname_pattern = arguments.get('fullname_pattern')
         url_pattern = arguments.get('url_pattern')
         color_pattern = arguments.get('color_pattern')
-        refresh = arguments.get('refresh', False)
 
-        jobs = ctx.client.search_jobs(
+        jobs = ctx.client.job.search_jobs(
             class_pattern=class_pattern,
             name_pattern=name_pattern,
             fullname_pattern=fullname_pattern,
             url_pattern=url_pattern,
             color_pattern=color_pattern,
-            refresh=refresh
         )
 
         return [
