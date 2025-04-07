@@ -1,23 +1,79 @@
 import pytest
 
+from mcp_jenkins.jenkins._job import JenkinsJob
 from mcp_jenkins.models.job import Folder, Job
 
+JOBS = [
+    {
+        '_class': 'com.cloudbees.hudson.plugins.folder.Folder',
+        'name': 'main_folder',
+        'url': 'http://localhost:8080/job/main_folder/',
+        'fullname': 'main_folder',
+        'jobs': [
+            {
+                '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowJob',
+                'name': 'main_job',
+                'url': 'http://localhost:8080/job/main_folder/main_job/',
+                'fullname': 'main_folder/main_job',
+                'color': 'notbuilt'
+            },
+            {
+                '_class': 'com.cloudbees.hudson.plugins.folder.Folder',
+                'name': 'sub_folder',
+                'url': 'http://localhost:8080/job/main_folder/sub_folder/',
+                'fullname': 'main_folder/sub_folder',
+                'jobs': [
+                    {
+                        '_class': 'com.tikal.jenkins.plugins.multijob.MultiJobProject',
+                        'name': 'sub_job',
+                        'url': 'http://localhost:8080/job/main_folder/sub_folder/sub_job/',
+                        'fullname': 'main_folder/sub_folder/sub_job',
+                        'color': 'blue'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        '_class': 'com.cloudbees.hudson.plugins.folder.Folder',
+        'name': 'sub_folder',
+        'url': 'http://localhost:8080/job/main_folder/sub_folder/',
+        'fullname': 'main_folder/sub_folder',
+        'jobs': [
+            {
+                '_class': 'com.tikal.jenkins.plugins.multijob.MultiJobProject',
+                'name': 'sub_job',
+                'url': 'http://localhost:8080/job/main_folder/sub_folder/sub_job/',
+                'fullname': 'main_folder/sub_folder/sub_job',
+                'color': 'blue'
+            }
+        ]
+    },
+    {
+        '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowJob',
+        'name': 'main_job',
+        'url': 'http://localhost:8080/job/main_folder/main_job/',
+        'fullname': 'main_folder/main_job',
+        'color': 'notbuilt'
+    },
+    {
+        '_class': 'com.tikal.jenkins.plugins.multijob.MultiJobProject',
+        'name': 'sub_job',
+        'url': 'http://localhost:8080/job/main_folder/sub_folder/sub_job/',
+        'fullname': 'main_folder/sub_folder/sub_job',
+        'color': 'blue'
+    }
+]
 
-@pytest.fixture
-def refresh_jobs(jenkins_client):
-    new_jobs = [
-        {
-            '_class': 'com.tikal.jenkins.plugins.multijob.MultiJobProject',
-            'name': 'sub_job',
-            'url': 'http://localhost:8080/job/main_folder/sub_folder/sub_job/',
-            'fullname': 'main_folder/sub_folder/sub_job',
-            'color': 'blue'
-        }
-    ]
-    jenkins_client.jenkins.get_jobs.return_value = new_jobs
+
+@pytest.fixture()
+def jenkins_job(mock_jenkins):
+    mock_jenkins.get_jobs.return_value = JOBS
+    mock_jenkins.get_job_config.return_value = ''
+    yield JenkinsJob(mock_jenkins)
 
 
-def test_job_to_model_returns_job(jenkins_client):
+def test_to_model_returns_job(jenkins_job):
     job_data = {
         '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowJob',
         'name': 'job1',
@@ -25,7 +81,7 @@ def test_job_to_model_returns_job(jenkins_client):
         'fullname': 'job1',
         'color': 'blue'
     }
-    model = jenkins_client._job_to_model(job_data)
+    model = jenkins_job._to_model(job_data)
 
     assert model == Job(
         class_='org.jenkinsci.plugins.workflow.job.WorkflowJob',
@@ -36,7 +92,7 @@ def test_job_to_model_returns_job(jenkins_client):
     )
 
 
-def test_job_to_model_returns_folder(jenkins_client):
+def test_to_model_returns_folder(jenkins_job):
     job_data = {
         '_class': 'com.cloudbees.hudson.plugins.folder.Folder',
         'name': 'folder1',
@@ -52,7 +108,7 @@ def test_job_to_model_returns_folder(jenkins_client):
             }
         ]
     }
-    model = jenkins_client._job_to_model(job_data)
+    model = jenkins_job._to_model(job_data)
 
     assert model == Folder(
         class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -71,8 +127,8 @@ def test_job_to_model_returns_folder(jenkins_client):
     )
 
 
-def test_get_all_jobs_refresh_false(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.get_all_jobs(refresh=False)
+def test_get_all_jobs(jenkins_job):
+    jobs = jenkins_job.get_all_jobs()
     assert jobs == [
         Folder(
             class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -136,21 +192,8 @@ def test_get_all_jobs_refresh_false(jenkins_client, refresh_jobs):
     ]
 
 
-def test_get_all_jobs_refresh_true(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.get_all_jobs(refresh=True)
-    assert jobs == [
-        Job(
-            class_='com.tikal.jenkins.plugins.multijob.MultiJobProject',
-            name='sub_job',
-            url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
-            fullname='main_folder/sub_folder/sub_job',
-            color='blue'
-        )
-    ]
-
-
-def test_search_jobs_class_pattern_refresh_false(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(class_pattern='.*Folder')
+def test_search_jobs_class_pattern(jenkins_job):
+    jobs = jenkins_job.search_jobs(class_pattern='.*Folder')
     assert jobs == [
         Folder(
             class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -200,21 +243,8 @@ def test_search_jobs_class_pattern_refresh_false(jenkins_client, refresh_jobs):
     ]
 
 
-def test_search_jobs_class_pattern_refresh_true(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(class_pattern='.*MultiJobProject', refresh=True)
-    assert jobs == [
-        Job(
-            class_='com.tikal.jenkins.plugins.multijob.MultiJobProject',
-            name='sub_job',
-            url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
-            fullname='main_folder/sub_folder/sub_job',
-            color='blue'
-        )
-    ]
-
-
-def test_search_jobs_name_pattern_refresh_false(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(name_pattern='main_folder')
+def test_search_jobs_name_pattern(jenkins_job):
+    jobs = jenkins_job.search_jobs(name_pattern='main_folder')
     assert jobs == [
         Folder(
             class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -249,13 +279,8 @@ def test_search_jobs_name_pattern_refresh_false(jenkins_client, refresh_jobs):
     ]
 
 
-def test_search_jobs_name_pattern_refresh_true(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(name_pattern='main_job', refresh=True)
-    assert jobs == []
-
-
-def test_search_jobs_fullname_pattern_refresh_false(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(fullname_pattern='main_folder/sub_folder/')
+def test_search_jobs_fullname_pattern(jenkins_job):
+    jobs = jenkins_job.search_jobs(fullname_pattern='main_folder/sub_folder/')
     assert jobs == [
         Job(
             class_='com.tikal.jenkins.plugins.multijob.MultiJobProject',
@@ -267,21 +292,8 @@ def test_search_jobs_fullname_pattern_refresh_false(jenkins_client, refresh_jobs
     ]
 
 
-def test_search_jobs_fullname_pattern_refresh_true(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(fullname_pattern='main_folder/sub_folder/', refresh=True)
-    assert jobs == [
-        Job(
-            class_='com.tikal.jenkins.plugins.multijob.MultiJobProject',
-            name='sub_job',
-            url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
-            fullname='main_folder/sub_folder/sub_job',
-            color='blue'
-        )
-    ]
-
-
-def test_search_jobs_url_pattern_refresh_false(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(url_pattern='http://localhost:8080/job/main_folder/sub_folder/')
+def test_search_jobs_url_pattern(jenkins_job):
+    jobs = jenkins_job.search_jobs(url_pattern='http://localhost:8080/job/main_folder/sub_folder/')
     assert jobs == [
         Folder(
             class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -308,21 +320,8 @@ def test_search_jobs_url_pattern_refresh_false(jenkins_client, refresh_jobs):
     ]
 
 
-def test_search_jobs_url_pattern_refresh_true(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(url_pattern='http://localhost:8080/job/main_folder/sub_folder/', refresh=True)
-    assert jobs == [
-        Job(
-            class_='com.tikal.jenkins.plugins.multijob.MultiJobProject',
-            name='sub_job',
-            url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
-            fullname='main_folder/sub_folder/sub_job',
-            color='blue'
-        )
-    ]
-
-
-def test_search_jobs_color_pattern_refresh_false(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(color_pattern='blue|notbuilt')
+def test_search_jobs_color_pattern(jenkins_job):
+    jobs = jenkins_job.search_jobs(color_pattern='blue|notbuilt')
     assert jobs == [
         Job(
             class_='org.jenkinsci.plugins.workflow.job.WorkflowJob',
@@ -341,27 +340,13 @@ def test_search_jobs_color_pattern_refresh_false(jenkins_client, refresh_jobs):
     ]
 
 
-def test_search_jobs_color_pattern_refresh_true(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(color_pattern='blue|notbuilt', refresh=True)
-    assert jobs == [
-        Job(
-            class_='com.tikal.jenkins.plugins.multijob.MultiJobProject',
-            name='sub_job',
-            url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
-            fullname='main_folder/sub_folder/sub_job',
-            color='blue'
-        )
-    ]
-
-
-def test_search_jobs_combin_patterns_refresh_false(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(
+def test_search_jobs_combin_patterns(jenkins_job):
+    jobs = jenkins_job.search_jobs(
         class_pattern='.*Job',
         name_pattern='.*job',
         fullname_pattern='.*sub_folder/',
         url_pattern='.*main_folder',
         color_pattern='blue|notbuilt',
-        refresh=True
     )
 
     assert jobs == [
@@ -375,19 +360,6 @@ def test_search_jobs_combin_patterns_refresh_false(jenkins_client, refresh_jobs)
     ]
 
 
-def test_search_jobs_combin_patterns_refresh_true(jenkins_client, refresh_jobs):
-    jobs = jenkins_client.search_jobs(
-        class_pattern='.*Job',
-        name_pattern='.*main',
-        fullname_pattern='.*sub_folder/',
-        url_pattern='.*main_folder',
-        color_pattern='blue|notbuilt',
-        refresh=True
-    )
-
-    assert jobs == []
-
-
-def test_job_config(jenkins_client):
-    config = jenkins_client.get_job_config('main_folder/main_job')
+def test_job_config(jenkins_job):
+    config = jenkins_job.get_job_config('main_folder/main_job')
     assert config == ''
