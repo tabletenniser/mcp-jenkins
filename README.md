@@ -21,6 +21,8 @@ npx @modelcontextprotocol/inspector uv run mcp-jenkins --jenkins-url xxx --jenki
 
 ### Optional Arguments
 - `--jenkins-timeout`: Timeout for Jenkins API requests, default is 5 seconds
+- `--transport`: [stdio|sse]
+- `--port`: Port to listen on for SSE transport
 
 
 ### Available Tools
