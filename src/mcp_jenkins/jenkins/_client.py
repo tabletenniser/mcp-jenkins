@@ -2,12 +2,14 @@ import re
 
 from jenkins import Jenkins
 
+from mcp_jenkins.jenkins._build import JenkinsBuild
 from mcp_jenkins.models.job import Folder, Job, JobBase
 
 
 class JenkinsClient:
     def __init__(self, *, url: str, username: str, password: str, timeout: int = 5) -> None:
         self.jenkins = Jenkins(url=url, username=username, password=password, timeout=timeout)
+        self.build = JenkinsBuild(self.jenkins)
         self.jobs = self.get_all_jobs(refresh=True)
 
     def _job_to_model(self, job_data: dict) -> JobBase:

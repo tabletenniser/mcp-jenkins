@@ -102,6 +102,14 @@ async def list_tools() -> list[Tool]:
                     }
                 }
             }
+        ),
+        Tool(
+            name='get_running_builds',
+            description='Get running builds',
+            inputSchema={
+                'type': 'object',
+                'properties': {},
+            },
         )
     ])
 
@@ -160,6 +168,19 @@ async def call_tool(name: str, arguments: Any) -> Sequence[TextContent]:
             TextContent(
                 type='text',
                 text=json.dumps([job.model_dump(by_alias=True) for job in jobs], indent=2, ensure_ascii=False)
+            )
+        ]
+
+    elif name == 'get_running_builds':
+        builds = ctx.client.build.get_running_builds()
+
+        return [
+            TextContent(
+                type='text',
+                text=json.dumps(
+                    [build.model_dump(by_alias=True, exclude_none=True) for build in builds],
+                    indent=2, ensure_ascii=False
+                )
             )
         ]
 

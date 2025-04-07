@@ -16,7 +16,7 @@ repos:
         args: [
             "--fix",
             "--exit-non-zero-on-fix",
-            "--ignore=FBT001,FBT002,UP035"
+            "--ignore=FBT001,FBT002,UP035,N815"
         ]
 #    -   id: ruff-format
 
