@@ -105,6 +105,6 @@ async def get_running_builds(ctx: Context) -> list[Build]:
     Get all running builds from Jenkins
 
     Returns:
-        list[Job]: A list of all running builds
+        list[Build]: A list of all running builds
     """
     return _client(ctx).build.get_running_builds()
