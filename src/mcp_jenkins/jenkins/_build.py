@@ -14,3 +14,6 @@ class JenkinsBuild:
     def get_running_builds(self) -> list[Build]:
         builds = self._jenkins.get_running_builds()
         return [self._to_model(build) for build in builds]
+
+    def get_build_info(self, fullname: str, number: int) -> Build:
+        return self._to_model(self._jenkins.get_build_info(fullname, number))

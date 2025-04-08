@@ -108,3 +108,21 @@ async def get_running_builds(ctx: Context) -> list[Build]:
         list[Build]: A list of all running builds
     """
     return _client(ctx).build.get_running_builds()
+
+
+@mcp.tool()
+async def get_build_info(ctx: Context, fullname: str, build_number: int | None = None) -> Build | str:
+    """
+    Get specific build info from Jenkins
+
+    Args:
+        fullname: The fullname of the job
+        build_number: The number of the build, if None, get the last build
+
+    Returns:
+        Build: The build info
+    """
+    client = _client(ctx)
+    if build_number is None:
+        build_number = client.job._jenkins.get_job_info(fullname)['lastBuild']['number']
+    return client.build.get_build_info(fullname, build_number)
