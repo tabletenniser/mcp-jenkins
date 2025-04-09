@@ -26,6 +26,6 @@ class JenkinsBuild:
                 if property_.get('parameterDefinitions') is not None:
                     # In jenkins lib, {} is same as None, so I need to mock a foo param to make it work
                     foo = str(uuid4())
-                    parameters = {foo: foo} if parameters == {} else parameters
+                    parameters = {foo: foo} if not parameters else parameters
                     break
         return self._jenkins.build_job(fullname, parameters)
