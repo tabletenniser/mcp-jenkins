@@ -1,18 +1,17 @@
 from mcp.server.fastmcp import Context
 
-from mcp_jenkins.models.job import JobBase
-from mcp_jenkins.server import mcp, client
+from mcp_jenkins.server import client, mcp
 
 
 @mcp.tool()
-async def get_all_jobs(ctx: Context) -> list[JobBase]:
+async def get_all_jobs(ctx: Context) -> list[dict]:
     """
     Get all jobs from Jenkins
 
     Returns:
-        list[JobBase]: A list of all jobs
+        list[dict]: A list of all jobs
     """
-    return client(ctx).job.get_all_jobs()
+    return [job.model_dump(exclude_none=True) for job in client(ctx).job.get_all_jobs()]
 
 
 @mcp.tool()
@@ -37,7 +36,7 @@ async def search_jobs(
         fullname_pattern: str = None,
         url_pattern: str = None,
         color_pattern: str = None,
-) -> list[JobBase]:
+) -> list[dict]:
     """
     Search job by specific field
 
@@ -49,12 +48,26 @@ async def search_jobs(
         color_pattern: The pattern of the color
 
     Returns:
-        list[JobBase]: A list of all jobs
+        list[dict]: A list of all jobs
     """
-    return client(ctx).job.search_jobs(
+    return [job.model_dump(exclude_none=True) for job in client(ctx).job.search_jobs(
         class_pattern=class_pattern,
         name_pattern=name_pattern,
         fullname_pattern=fullname_pattern,
         url_pattern=url_pattern,
         color_pattern=color_pattern,
-    )
+    )]
+
+
+@mcp.tool()
+async def get_job_info(ctx: Context, fullname: str) -> dict:
+    """
+    Get specific job info from Jenkins
+
+    Args:
+        fullname: The fullname of the job
+
+    Returns:
+        dict: The job info
+    """
+    return client(ctx).job.get_job_info(fullname).model_dump(exclude_none=True)
