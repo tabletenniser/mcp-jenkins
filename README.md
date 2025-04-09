@@ -7,6 +7,11 @@
 
 The Model Context Protocol (MCP) is an open-source implementation that bridges Jenkins with AI language models following Anthropic's MCP specification. This project enables secure, contextual AI interactions with Jenkins tools while maintaining data privacy and security.
 
+
+## Cursor Demo
+![cursor demo](https://github.com/user-attachments/assets/ba954a67-e9ca-4d38-b962-19fb8856bdde)
+
+
 ## Setup Guide
 
 ### Installation
