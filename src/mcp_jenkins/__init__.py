@@ -2,7 +2,7 @@ import os
 
 import click
 
-from .server import mcp
+from mcp_jenkins.server import mcp
 
 
 @click.command()
