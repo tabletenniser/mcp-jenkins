@@ -29,3 +29,20 @@ async def get_build_info(ctx: Context, fullname: str, build_number: int | None =
     if build_number is None:
         build_number = client(ctx).job.get_job_info(fullname).lastBuild.number
     return client(ctx).build.get_build_info(fullname, build_number).model_dump(exclude_none=True)
+
+
+@mcp.tool()
+async def build_job(ctx: Context, fullname: str, parameters: dict | None = None) -> int:
+    """
+    Build a job in Jenkins
+
+    Args:
+        fullname: The fullname of the job
+        parameters: Update the default parameters of the job.
+            If you want to use the default param, just set it to {}.
+            If the job have no parameters, this can be None.
+
+    Returns:
+        The build number of the job
+    """
+    return client(ctx).build.build_job(fullname, parameters)
