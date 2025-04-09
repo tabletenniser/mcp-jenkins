@@ -1,4 +1,10 @@
 # MCP Jenkins
+![PyPI Version](https://img.shields.io/pypi/v/mcp-jenkins)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/mcp-jenkins)
+[![PyPI Downloads](https://static.pepy.tech/badge/mcp-jenkins)](https://pepy.tech/projects/mcp-jenkins)
+![License](https://img.shields.io/github/license/lanbaoshen/mcp-jenkins)
+[![smithery badge](https://smithery.ai/badge/@lanbaoshen/mcp-jenkins)](https://smithery.ai/server/@lanbaoshen/mcp-jenkins)
+
 MCP server that integrates Jenkins
 
 ## Installation
