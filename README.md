@@ -125,6 +125,8 @@ if __name__ == "__main__":
 | search_jobs        | Search job by specific field |
 | get_running_builds | Get running builds           |
 | get_build_info     | Get build info               |
+| get_job_info       | Get job info                 |
+| build_job          | Build a job with param       |
 
 
 ## Development & Debugging
@@ -136,6 +138,16 @@ npx @modelcontextprotocol/inspector uvx mcp-jenkins --jenkins-url xxx --jenkins-
 # For local development version
 npx @modelcontextprotocol/inspector uv --directory /path/to/your/mcp-jenkins run mcp-jenkins --jenkins-url xxx --jenkins-username xxx --jenkins-password xxx
 ```
+
+### UT
+```
+# Install Dependency
+uv sync --all-extras --dev
+
+# Execute UT
+uv run pytest --cov=mcp_jenkins 
+```
+
 
 ## License
 Licensed under MIT - see [LICENSE](LICENSE) file. This is not an official Jenkins product.

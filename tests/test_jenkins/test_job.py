@@ -1,6 +1,7 @@
 import pytest
 
 from mcp_jenkins.jenkins._job import JenkinsJob
+from mcp_jenkins.models.build import Build
 from mcp_jenkins.models.job import Folder, Job
 
 JOBS = [
@@ -65,12 +66,56 @@ JOBS = [
     }
 ]
 
+JOB_INFO = {
+    '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowJob',
+    'fullName': 'folder/job',
+    'name': 'job',
+    'url': 'http://localhost:8080/job/folder/job/job/',
+    'buildable': True,
+    'builds': [
+        {
+            '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowRun',
+            'number': 110,
+            'url': 'http://localhost:8080/job/folder/job/job/110'
+        }
+    ],
+    'color': 'blue',
+    'lastBuild': {
+        '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowRun',
+        'number': 110,
+        'url': 'http://localhost:8080/job/folder/job/job/110'
+    },
+    'nextBuildNumber': 111,
+    'inQueue': False,
+}
+
+FOLDER_INFO = {
+    '_class': 'com.cloudbees.hudson.plugins.folder.Folder',
+    'fullName': 'folder',
+    'name': 'folder',
+    'url': 'http://localhost:8080/job/folder/',
+    'jobs': [
+        {
+            '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowJob',
+            'name': 'job',
+            'url': 'http://localhost:8080/job/folder/job/job/',
+            'color': 'blue'
+        },
+    ]
+}
+
 
 @pytest.fixture()
 def jenkins_job(mock_jenkins):
     mock_jenkins.get_jobs.return_value = JOBS
+    mock_jenkins.get_job_info.return_value = JOB_INFO
     mock_jenkins.get_job_config.return_value = ''
+
     yield JenkinsJob(mock_jenkins)
+
+    mock_jenkins.get_jobs.return_value = JOBS
+    mock_jenkins.get_job_info.return_value = JOB_INFO
+    mock_jenkins.get_job_config.return_value = ''
 
 
 def test_to_model_returns_job(jenkins_job):
@@ -363,3 +408,50 @@ def test_search_jobs_combin_patterns(jenkins_job):
 def test_job_config(jenkins_job):
     config = jenkins_job.get_job_config('main_folder/main_job')
     assert config == ''
+
+
+def test_get_job_info_return_job(jenkins_job):
+    job_info = jenkins_job.get_job_info('folder/job')
+
+    assert job_info == Job(
+        class_='org.jenkinsci.plugins.workflow.job.WorkflowJob',
+        fullName='folder/job',
+        name='job',
+        url='http://localhost:8080/job/folder/job/job/',
+        buildable=True,
+        builds=[
+            Build(
+                class_='org.jenkinsci.plugins.workflow.job.WorkflowRun',
+                number=110,
+                url='http://localhost:8080/job/folder/job/job/110'
+            )
+        ],
+        color='blue',
+        lastBuild=Build(
+            class_='org.jenkinsci.plugins.workflow.job.WorkflowRun',
+            number=110,
+            url='http://localhost:8080/job/folder/job/job/110'
+        ),
+        nextBuildNumber=111,
+        inQueue=False
+    )
+
+
+def test_get_job_info_return_folder(jenkins_job):
+    jenkins_job._jenkins.get_job_info.return_value = FOLDER_INFO
+    job_info = jenkins_job.get_job_info('folder')
+
+    assert job_info == Folder(
+        class_='com.cloudbees.hudson.plugins.folder.Folder',
+        fullName='folder',
+        name='folder',
+        url='http://localhost:8080/job/folder/',
+        jobs=[
+            Job(
+                class_='org.jenkinsci.plugins.workflow.job.WorkflowJob',
+                name='job',
+                url='http://localhost:8080/job/folder/job/job/',
+                color='blue'
+            )
+        ]
+    )

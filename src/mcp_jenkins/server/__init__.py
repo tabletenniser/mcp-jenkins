@@ -42,4 +42,4 @@ mcp = FastMCP('mcp-jenkins', lifespan=jenkins_lifespan)
 
 
 # Import the job and build modules here to avoid circular imports
-from mcp_jenkins.server import job, build
+from mcp_jenkins.server import build, job  # noqa: E402, F401

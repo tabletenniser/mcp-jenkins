@@ -54,3 +54,6 @@ class JenkinsJob:
 
     def get_job_config(self, fullname: str) -> str:
         return self._jenkins.get_job_config(fullname)
+
+    def get_job_info(self, fullname: str) -> JobBase:
+        return self._to_model(self._jenkins.get_job_info(fullname, depth=1))

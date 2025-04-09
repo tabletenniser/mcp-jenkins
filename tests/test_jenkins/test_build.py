@@ -55,6 +55,16 @@ BUILD_INFO = {
 def jenkins_build(mock_jenkins):
     mock_jenkins.get_running_builds.return_value = RUNNING_BUILDS
     mock_jenkins.get_build_info.return_value = BUILD_INFO
+    mock_jenkins.build_job.return_value = 1
+    mock_jenkins.get_job_info.return_value = {
+        'property': [
+            {
+                '_class': 'hudson.model.ParametersDefinitionProperty',
+                'parameterDefinitions': []
+            }
+        ]
+    }
+
     yield JenkinsBuild(mock_jenkins)
 
 
@@ -116,3 +126,7 @@ def test_get_build_info(jenkins_build):
             url='http://example.com/job/weekly/job/folder-one/job/job-two/109/'
         )
     )
+
+
+def test_build_job(jenkins_build):
+    assert jenkins_build.build_job('job', parameters=None) == 1
