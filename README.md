@@ -125,6 +125,8 @@ if __name__ == "__main__":
 | search_jobs        | Search job by specific field |
 | get_running_builds | Get running builds           |
 | get_build_info     | Get build info               |
+| get_job_info       | Get job info                 |
+| build_job          | Build a job with param       |
 
 
 ## Development & Debugging

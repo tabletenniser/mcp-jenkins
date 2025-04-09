@@ -56,6 +56,15 @@ def jenkins_build(mock_jenkins):
     mock_jenkins.get_running_builds.return_value = RUNNING_BUILDS
     mock_jenkins.get_build_info.return_value = BUILD_INFO
     mock_jenkins.build_job.return_value = 1
+    mock_jenkins.get_job_info.return_value = {
+        'property': [
+            {
+                '_class': 'hudson.model.ParametersDefinitionProperty',
+                'parameterDefinitions': []
+            }
+        ]
+    }
+
     yield JenkinsBuild(mock_jenkins)
 
 
