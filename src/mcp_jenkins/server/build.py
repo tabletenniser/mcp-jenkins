@@ -32,15 +32,13 @@ async def get_build_info(ctx: Context, fullname: str, build_number: int | None =
 
 
 @mcp.tool()
-async def build_job(ctx: Context, fullname: str, parameters: dict | None = None) -> int:
+async def build_job(ctx: Context, fullname: str, parameters: dict = None) -> int:
     """
     Build a job in Jenkins
 
     Args:
         fullname: The fullname of the job
         parameters: Update the default parameters of the job.
-            If you want to use the default param, just set it to {}.
-            If the job have no parameters, this can be None.
 
     Returns:
         The build number of the job
