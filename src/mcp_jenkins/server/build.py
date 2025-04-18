@@ -15,7 +15,7 @@ async def get_running_builds(ctx: Context) -> list[dict]:
 
 
 @mcp.tool()
-async def get_build_info(ctx: Context, fullname: str, build_number: str) -> dict:
+async def get_build_info(ctx: Context, fullname: str, build_number: int | None = None) -> dict:
     """
     Get specific build info from Jenkins
 
@@ -26,7 +26,8 @@ async def get_build_info(ctx: Context, fullname: str, build_number: str) -> dict
     Returns:
         Build: The build info
     """
-    build_number = int(build_number)
+    if build_number is None:
+        build_number = client(ctx).job.get_job_info(fullname).lastBuild.number
     return client(ctx).build.get_build_info(fullname, build_number).model_dump(exclude_none=True)
 
 
