@@ -130,3 +130,48 @@ def test_get_build_info(jenkins_build):
 
 def test_build_job(jenkins_build):
     assert jenkins_build.build_job('job', parameters=None) == 1
+
+
+def test_get_build_logs(jenkins_build):
+    # Setup mock response
+    expected_logs = "Build started\nStep 1: Checkout\nBuild successful"
+    jenkins_build._jenkins.get_build_console_output.return_value = expected_logs
+
+    # Call the function
+    logs = jenkins_build.get_build_logs(fullname='folder-one/job-two', number=110)
+
+    # Verify the correct Jenkins API method was called with right parameters
+    jenkins_build._jenkins.get_build_console_output.assert_called_once_with('folder-one/job-two', 110)
+
+    # Verify the returned logs match the expected output
+    assert logs == expected_logs
+
+
+def test_get_build_logs_empty(jenkins_build):
+    # Test handling of empty logs
+    jenkins_build._jenkins.get_build_console_output.return_value = ""
+
+    logs = jenkins_build.get_build_logs(fullname='folder-one/job-two', number=110)
+
+    assert logs == ""
+    jenkins_build._jenkins.get_build_console_output.assert_called_once_with('folder-one/job-two', 110)
+
+
+def test_get_build_logs_unicode(jenkins_build):
+    # Test handling of logs with unicode characters
+    expected_logs = "Build started\n🚀 Deploying\n✅ Success\n❌ Failed step\n"
+    jenkins_build._jenkins.get_build_console_output.return_value = expected_logs
+
+    logs = jenkins_build.get_build_logs(fullname='folder-one/job-two', number=110)
+
+    assert logs == expected_logs
+    jenkins_build._jenkins.get_build_console_output.assert_called_once_with('folder-one/job-two', 110)
+
+
+def test_get_build_logs_not_found(jenkins_build):
+    # Test handling of non-existent build
+    from jenkins import JenkinsException
+    jenkins_build._jenkins.get_build_console_output.side_effect = JenkinsException("Build not found")
+
+    with pytest.raises(JenkinsException, match="Build not found"):
+        jenkins_build.get_build_logs(fullname='folder-one/job-two', number=999999)

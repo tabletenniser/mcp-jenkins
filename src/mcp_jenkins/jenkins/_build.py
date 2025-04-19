@@ -29,3 +29,16 @@ class JenkinsBuild:
                     parameters = {foo: foo} if not parameters else parameters
                     break
         return self._jenkins.build_job(fullname, parameters)
+
+    def get_build_logs(self, fullname: str, number: int) -> str:
+        """
+        Retrieve logs from a specific build.
+
+        Args:
+            fullname: The fullname of the job
+            number: The build number
+
+        Returns:
+            str: The logs of the build
+        """
+        return self._jenkins.get_build_console_output(fullname, number)

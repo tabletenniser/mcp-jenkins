@@ -44,3 +44,19 @@ async def build_job(ctx: Context, fullname: str, parameters: dict = None) -> int
         The build number of the job
     """
     return client(ctx).build.build_job(fullname, parameters)
+
+
+@mcp.tool()
+async def get_build_logs(ctx: Context, fullname: str, build_number: str) -> str:
+    """
+    Get logs from a specific build in Jenkins
+
+    Args:
+        fullname: The fullname of the job
+        build_number: The number of the build
+
+    Returns:
+        str: The logs of the build
+    """
+    build_number = int(build_number)
+    return client(ctx).build.get_build_logs(fullname, build_number)
