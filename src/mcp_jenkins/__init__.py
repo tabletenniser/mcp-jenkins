@@ -13,12 +13,12 @@ from mcp_jenkins.server import mcp
 @click.option('--transport', type=click.Choice(['stdio', 'sse']), default='stdio')
 @click.option('--port', default=9887, help='Port to listen on for SSE transport')
 def main(
-        jenkins_url: str,
-        jenkins_username: str,
-        jenkins_password: str,
-        jenkins_timeout: int,
-        transport: str,
-        port: int,
+    jenkins_url: str,
+    jenkins_username: str,
+    jenkins_password: str,
+    jenkins_timeout: int,
+    transport: str,
+    port: int,
 ) -> None:
     """
     Jenkins' functionality for MCP

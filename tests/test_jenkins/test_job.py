@@ -16,7 +16,7 @@ JOBS = [
                 'name': 'main_job',
                 'url': 'http://localhost:8080/job/main_folder/main_job/',
                 'fullname': 'main_folder/main_job',
-                'color': 'notbuilt'
+                'color': 'notbuilt',
             },
             {
                 '_class': 'com.cloudbees.hudson.plugins.folder.Folder',
@@ -29,11 +29,11 @@ JOBS = [
                         'name': 'sub_job',
                         'url': 'http://localhost:8080/job/main_folder/sub_folder/sub_job/',
                         'fullname': 'main_folder/sub_folder/sub_job',
-                        'color': 'blue'
+                        'color': 'blue',
                     }
-                ]
-            }
-        ]
+                ],
+            },
+        ],
     },
     {
         '_class': 'com.cloudbees.hudson.plugins.folder.Folder',
@@ -46,24 +46,24 @@ JOBS = [
                 'name': 'sub_job',
                 'url': 'http://localhost:8080/job/main_folder/sub_folder/sub_job/',
                 'fullname': 'main_folder/sub_folder/sub_job',
-                'color': 'blue'
+                'color': 'blue',
             }
-        ]
+        ],
     },
     {
         '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowJob',
         'name': 'main_job',
         'url': 'http://localhost:8080/job/main_folder/main_job/',
         'fullname': 'main_folder/main_job',
-        'color': 'notbuilt'
+        'color': 'notbuilt',
     },
     {
         '_class': 'com.tikal.jenkins.plugins.multijob.MultiJobProject',
         'name': 'sub_job',
         'url': 'http://localhost:8080/job/main_folder/sub_folder/sub_job/',
         'fullname': 'main_folder/sub_folder/sub_job',
-        'color': 'blue'
-    }
+        'color': 'blue',
+    },
 ]
 
 JOB_INFO = {
@@ -76,14 +76,14 @@ JOB_INFO = {
         {
             '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowRun',
             'number': 110,
-            'url': 'http://localhost:8080/job/folder/job/job/110'
+            'url': 'http://localhost:8080/job/folder/job/job/110',
         }
     ],
     'color': 'blue',
     'lastBuild': {
         '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowRun',
         'number': 110,
-        'url': 'http://localhost:8080/job/folder/job/job/110'
+        'url': 'http://localhost:8080/job/folder/job/job/110',
     },
     'nextBuildNumber': 111,
     'inQueue': False,
@@ -99,9 +99,9 @@ FOLDER_INFO = {
             '_class': 'org.jenkinsci.plugins.workflow.job.WorkflowJob',
             'name': 'job',
             'url': 'http://localhost:8080/job/folder/job/job/',
-            'color': 'blue'
+            'color': 'blue',
         },
-    ]
+    ],
 }
 
 
@@ -124,7 +124,7 @@ def test_to_model_returns_job(jenkins_job):
         'name': 'job1',
         'url': 'http://localhost:8080/job/job1/',
         'fullname': 'job1',
-        'color': 'blue'
+        'color': 'blue',
     }
     model = jenkins_job._to_model(job_data)
 
@@ -133,7 +133,7 @@ def test_to_model_returns_job(jenkins_job):
         name='job1',
         url='http://localhost:8080/job/job1/',
         fullname='job1',
-        color='blue'
+        color='blue',
     )
 
 
@@ -149,9 +149,9 @@ def test_to_model_returns_folder(jenkins_job):
                 'name': 'job1',
                 'url': 'http://localhost:8080/job/folder1/job1/',
                 'fullname': 'folder1/job1',
-                'color': 'blue'
+                'color': 'blue',
             }
-        ]
+        ],
     }
     model = jenkins_job._to_model(job_data)
 
@@ -166,9 +166,9 @@ def test_to_model_returns_folder(jenkins_job):
                 name='job1',
                 url='http://localhost:8080/job/folder1/job1/',
                 fullname='folder1/job1',
-                color='blue'
+                color='blue',
             )
-        ]
+        ],
     )
 
 
@@ -186,7 +186,7 @@ def test_get_all_jobs(jenkins_job):
                     name='main_job',
                     url='http://localhost:8080/job/main_folder/main_job/',
                     fullname='main_folder/main_job',
-                    color='notbuilt'
+                    color='notbuilt',
                 ),
                 Folder(
                     class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -199,11 +199,11 @@ def test_get_all_jobs(jenkins_job):
                             name='sub_job',
                             url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
                             fullname='main_folder/sub_folder/sub_job',
-                            color='blue'
+                            color='blue',
                         )
-                    ]
-                )
-            ]
+                    ],
+                ),
+            ],
         ),
         Folder(
             class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -216,24 +216,24 @@ def test_get_all_jobs(jenkins_job):
                     name='sub_job',
                     url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
                     fullname='main_folder/sub_folder/sub_job',
-                    color='blue'
+                    color='blue',
                 )
-            ]
+            ],
         ),
         Job(
             class_='org.jenkinsci.plugins.workflow.job.WorkflowJob',
             name='main_job',
             url='http://localhost:8080/job/main_folder/main_job/',
             fullname='main_folder/main_job',
-            color='notbuilt'
+            color='notbuilt',
         ),
         Job(
             class_='com.tikal.jenkins.plugins.multijob.MultiJobProject',
             name='sub_job',
             url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
             fullname='main_folder/sub_folder/sub_job',
-            color='blue'
-        )
+            color='blue',
+        ),
     ]
 
 
@@ -251,7 +251,7 @@ def test_search_jobs_class_pattern(jenkins_job):
                     name='main_job',
                     url='http://localhost:8080/job/main_folder/main_job/',
                     fullname='main_folder/main_job',
-                    color='notbuilt'
+                    color='notbuilt',
                 ),
                 Folder(
                     class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -264,11 +264,11 @@ def test_search_jobs_class_pattern(jenkins_job):
                             name='sub_job',
                             url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
                             fullname='main_folder/sub_folder/sub_job',
-                            color='blue'
+                            color='blue',
                         )
-                    ]
-                )
-            ]
+                    ],
+                ),
+            ],
         ),
         Folder(
             class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -281,10 +281,10 @@ def test_search_jobs_class_pattern(jenkins_job):
                     name='sub_job',
                     url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
                     fullname='main_folder/sub_folder/sub_job',
-                    color='blue'
+                    color='blue',
                 )
-            ]
-        )
+            ],
+        ),
     ]
 
 
@@ -302,7 +302,7 @@ def test_search_jobs_name_pattern(jenkins_job):
                     name='main_job',
                     url='http://localhost:8080/job/main_folder/main_job/',
                     fullname='main_folder/main_job',
-                    color='notbuilt'
+                    color='notbuilt',
                 ),
                 Folder(
                     class_='com.cloudbees.hudson.plugins.folder.Folder',
@@ -315,11 +315,11 @@ def test_search_jobs_name_pattern(jenkins_job):
                             name='sub_job',
                             url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
                             fullname='main_folder/sub_folder/sub_job',
-                            color='blue'
+                            color='blue',
                         )
-                    ]
-                )
-            ]
+                    ],
+                ),
+            ],
         )
     ]
 
@@ -332,7 +332,7 @@ def test_search_jobs_fullname_pattern(jenkins_job):
             name='sub_job',
             url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
             fullname='main_folder/sub_folder/sub_job',
-            color='blue'
+            color='blue',
         )
     ]
 
@@ -351,17 +351,17 @@ def test_search_jobs_url_pattern(jenkins_job):
                     name='sub_job',
                     url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
                     fullname='main_folder/sub_folder/sub_job',
-                    color='blue'
+                    color='blue',
                 )
-            ]
+            ],
         ),
         Job(
             class_='com.tikal.jenkins.plugins.multijob.MultiJobProject',
             name='sub_job',
             url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
             fullname='main_folder/sub_folder/sub_job',
-            color='blue'
-        )
+            color='blue',
+        ),
     ]
 
 
@@ -373,15 +373,15 @@ def test_search_jobs_color_pattern(jenkins_job):
             name='main_job',
             url='http://localhost:8080/job/main_folder/main_job/',
             fullname='main_folder/main_job',
-            color='notbuilt'
+            color='notbuilt',
         ),
         Job(
             class_='com.tikal.jenkins.plugins.multijob.MultiJobProject',
             name='sub_job',
             url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
             fullname='main_folder/sub_folder/sub_job',
-            color='blue'
-        )
+            color='blue',
+        ),
     ]
 
 
@@ -400,7 +400,7 @@ def test_search_jobs_combin_patterns(jenkins_job):
             name='sub_job',
             url='http://localhost:8080/job/main_folder/sub_folder/sub_job/',
             fullname='main_folder/sub_folder/sub_job',
-            color='blue'
+            color='blue',
         )
     ]
 
@@ -423,17 +423,17 @@ def test_get_job_info_return_job(jenkins_job):
             Build(
                 class_='org.jenkinsci.plugins.workflow.job.WorkflowRun',
                 number=110,
-                url='http://localhost:8080/job/folder/job/job/110'
+                url='http://localhost:8080/job/folder/job/job/110',
             )
         ],
         color='blue',
         lastBuild=Build(
             class_='org.jenkinsci.plugins.workflow.job.WorkflowRun',
             number=110,
-            url='http://localhost:8080/job/folder/job/job/110'
+            url='http://localhost:8080/job/folder/job/job/110',
         ),
         nextBuildNumber=111,
-        inQueue=False
+        inQueue=False,
     )
 
 
@@ -451,7 +451,7 @@ def test_get_job_info_return_folder(jenkins_job):
                 class_='org.jenkinsci.plugins.workflow.job.WorkflowJob',
                 name='job',
                 url='http://localhost:8080/job/folder/job/job/',
-                color='blue'
+                color='blue',
             )
-        ]
+        ],
     )

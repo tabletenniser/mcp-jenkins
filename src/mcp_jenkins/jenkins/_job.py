@@ -19,12 +19,12 @@ class JenkinsJob:
         return [self._to_model(job) for job in self._jenkins.get_jobs(folder_depth=20)]
 
     def search_jobs(
-            self,
-            class_pattern: str = None,
-            name_pattern: str = None,
-            fullname_pattern: str = None,
-            url_pattern: str = None,
-            color_pattern: str = None,
+        self,
+        class_pattern: str = None,
+        name_pattern: str = None,
+        fullname_pattern: str = None,
+        url_pattern: str = None,
+        color_pattern: str = None,
     ) -> list[JobBase]:
         result = []
 

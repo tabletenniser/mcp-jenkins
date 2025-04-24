@@ -4,9 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class Build(BaseModel):
-    model_config = ConfigDict(
-        validate_by_name=True
-    )
+    model_config = ConfigDict(validate_by_name=True)
 
     number: int
     url: str

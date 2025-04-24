@@ -6,9 +6,7 @@ from mcp_jenkins.models.build import Build
 
 
 class JobBase(BaseModel):
-    model_config = ConfigDict(
-        validate_by_name=True
-    )
+    model_config = ConfigDict(validate_by_name=True)
 
     class_: str = Field(..., alias='_class')
     name: str

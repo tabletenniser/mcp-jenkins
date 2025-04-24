@@ -1,7 +1,7 @@
 import os
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from typing import AsyncIterator
 
 from mcp.server.fastmcp import Context, FastMCP
 
@@ -23,8 +23,9 @@ async def jenkins_lifespan(server: FastMCP) -> AsyncIterator[JenkinsContext]:
 
         client = JenkinsClient(
             url=jenkins_url,
-            username=jenkins_username, password=jenkins_password,
-            timeout=jenkins_timeout
+            username=jenkins_username,
+            password=jenkins_password,
+            timeout=jenkins_timeout,
         )
 
         # Provide context to the application

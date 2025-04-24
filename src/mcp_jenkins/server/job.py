@@ -30,12 +30,12 @@ async def get_job_config(ctx: Context, fullname: str) -> str:
 
 @mcp.tool()
 async def search_jobs(
-        ctx: Context,
-        class_pattern: str = None,
-        name_pattern: str = None,
-        fullname_pattern: str = None,
-        url_pattern: str = None,
-        color_pattern: str = None,
+    ctx: Context,
+    class_pattern: str = None,
+    name_pattern: str = None,
+    fullname_pattern: str = None,
+    url_pattern: str = None,
+    color_pattern: str = None,
 ) -> list[dict]:
     """
     Search job by specific field
@@ -50,13 +50,16 @@ async def search_jobs(
     Returns:
         list[dict]: A list of all jobs
     """
-    return [job.model_dump(exclude_none=True) for job in client(ctx).job.search_jobs(
-        class_pattern=class_pattern,
-        name_pattern=name_pattern,
-        fullname_pattern=fullname_pattern,
-        url_pattern=url_pattern,
-        color_pattern=color_pattern,
-    )]
+    return [
+        job.model_dump(exclude_none=True)
+        for job in client(ctx).job.search_jobs(
+            class_pattern=class_pattern,
+            name_pattern=name_pattern,
+            fullname_pattern=fullname_pattern,
+            url_pattern=url_pattern,
+            color_pattern=color_pattern,
+        )
+    ]
 
 
 @mcp.tool()

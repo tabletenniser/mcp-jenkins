@@ -9,15 +9,15 @@ RUNNING_BUILDS = [
         'number': 2,
         'url': 'http://example.com/job/RUN_JOB_LIST/job/job-one/2/',
         'node': '(master)',
-        'executor': 4
+        'executor': 4,
     },
     {
         'name': 'weekly',
         'number': 39,
         'url': 'http://example.com/job/weekly/job/folder-one/job/job-two/39/',
         'node': '001',
-        'executor': 0
-    }
+        'executor': 0,
+    },
 ]
 
 BUILD_INFO = {
@@ -29,9 +29,9 @@ BUILD_INFO = {
                 {
                     '_class': 'hudson.model.StringParameterValue',
                     'name': 'Param1',
-                    'value': 'Test Param'
+                    'value': 'Test Param',
                 }
-            ]
+            ],
         }
     ],
     'building': False,
@@ -46,8 +46,8 @@ BUILD_INFO = {
     'nextBuild': None,
     'previousBuild': {
         'number': 109,
-        'url': 'http://example.com/job/weekly/job/folder-one/job/job-two/109/'
-    }
+        'url': 'http://example.com/job/weekly/job/folder-one/job/job-two/109/',
+    },
 }
 
 
@@ -60,7 +60,7 @@ def jenkins_build(mock_jenkins):
         'property': [
             {
                 '_class': 'hudson.model.ParametersDefinitionProperty',
-                'parameterDefinitions': []
+                'parameterDefinitions': [],
             }
         ]
     }
@@ -69,20 +69,22 @@ def jenkins_build(mock_jenkins):
 
 
 def test_to_model(jenkins_build):
-    model = jenkins_build._to_model({
-        'name': 'RUN_JOB_LIST',
-        'number': 2,
-        'url': 'http://example.com/job/RUN_JOB_LIST/job/job-one/2/',
-        'node': '(master)',
-        'executor': 4
-    })
+    model = jenkins_build._to_model(
+        {
+            'name': 'RUN_JOB_LIST',
+            'number': 2,
+            'url': 'http://example.com/job/RUN_JOB_LIST/job/job-one/2/',
+            'node': '(master)',
+            'executor': 4,
+        }
+    )
 
     assert model == Build(
         name='RUN_JOB_LIST',
         number=2,
         url='http://example.com/job/RUN_JOB_LIST/job/job-one/2/',
         node='(master)',
-        executor=4
+        executor=4,
     )
 
 
@@ -95,14 +97,14 @@ def test_get_running_builds(jenkins_build):
         number=2,
         url='http://example.com/job/RUN_JOB_LIST/job/job-one/2/',
         node='(master)',
-        executor=4
+        executor=4,
     )
     assert builds[1] == Build(
         name='weekly',
         number=39,
         url='http://example.com/job/weekly/job/folder-one/job/job-two/39/',
         node='001',
-        executor=0
+        executor=0,
     )
 
 
@@ -123,8 +125,8 @@ def test_get_build_info(jenkins_build):
         nextBuild=None,
         previousBuild=Build(
             number=109,
-            url='http://example.com/job/weekly/job/folder-one/job/job-two/109/'
-        )
+            url='http://example.com/job/weekly/job/folder-one/job/job-two/109/',
+        ),
     )
 
 
@@ -171,6 +173,7 @@ def test_get_build_logs_unicode(jenkins_build):
 def test_get_build_logs_not_found(jenkins_build):
     # Test handling of non-existent build
     from jenkins import JenkinsException
+
     jenkins_build._jenkins.get_build_console_output.side_effect = JenkinsException('Build not found')
 
     with pytest.raises(JenkinsException, match='Build not found'):
