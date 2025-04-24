@@ -139,13 +139,23 @@ npx @modelcontextprotocol/inspector uvx mcp-jenkins --jenkins-url xxx --jenkins-
 npx @modelcontextprotocol/inspector uv --directory /path/to/your/mcp-jenkins run mcp-jenkins --jenkins-url xxx --jenkins-username xxx --jenkins-password xxx
 ```
 
+### Pre-Commit Hook
+```shell
+# Install Dependency
+uv sync --all-extras --dev
+pre-commit install
+
+# Manually execute
+pre-commit run --all-files
+```
+
 ### UT
 ```
 # Install Dependency
 uv sync --all-extras --dev
 
 # Execute UT
-uv run pytest --cov=mcp_jenkins 
+uv run pytest --cov=mcp_jenkins
 ```
 
 
