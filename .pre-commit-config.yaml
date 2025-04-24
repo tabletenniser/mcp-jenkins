@@ -3,11 +3,19 @@ repos:
     rev: v5.0.0
     hooks:
     -   id: trailing-whitespace
+        args: ["--markdown-linebreak-ext=md"]
     -   id: end-of-file-fixer
-    -   id: check-yaml
-    -   id: check-added-large-files
+    -   id: check-ast
+    -   id: check-xml
     -   id: check-toml
+    -   id: check-yaml
+    -   id: pretty-format-json
+    -   id: check-json
+    -   id: check-case-conflict
+    -   id: check-added-large-files
     -   id: debug-statements
+    -   id: check-docstring-first
+    -   id: double-quote-string-fixer
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.2
