@@ -2,8 +2,9 @@
 ![PyPI Version](https://img.shields.io/pypi/v/mcp-jenkins)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/mcp-jenkins)
 [![PyPI Downloads](https://static.pepy.tech/badge/mcp-jenkins)](https://pepy.tech/projects/mcp-jenkins)
-![License](https://img.shields.io/github/license/lanbaoshen/mcp-jenkins)
 [![smithery badge](https://smithery.ai/badge/@lanbaoshen/mcp-jenkins)](https://smithery.ai/server/@lanbaoshen/mcp-jenkins)
+[![test](https://github.com/lanbaoshen/mcp-jenkins/actions/workflows/test.yml/badge.svg)](https://github.com/lanbaoshen/mcp-jenkins/actions/workflows/test.yml/badge.svg)
+![License](https://img.shields.io/github/license/lanbaoshen/mcp-jenkins)
 
 The Model Context Protocol (MCP) is an open-source implementation that bridges Jenkins with AI language models following Anthropic's MCP specification. This project enables secure, contextual AI interactions with Jenkins tools while maintaining data privacy and security.
 
